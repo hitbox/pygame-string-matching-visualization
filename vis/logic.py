@@ -1,5 +1,5 @@
+import logging
 import string
-from pprint import pprint as pp
 
 # http://www.cs.cornell.edu/courses/cs312/2002fa/lectures/lec26.htm
 
@@ -8,10 +8,6 @@ class BoyerMoore:
     def __init__(self, needle, haystack):
         self.needle = needle
         self.haystack = haystack
-        self.reset()
-
-    def reset(self):
-        pass
 
     def search(self):
         T = self.haystack
@@ -24,13 +20,20 @@ class BoyerMoore:
         #       entire patten lenght. Change it and see.
 
         last = {c: P.rindex(c) if c in P else -1 for c in T}
-
-        offset = 0
-
         yield locals()
+
+        # pattern offset in relation to text
+        offset = 0
+        success = None
+        mismatch = None
+
+        # the amount to move offset
+        shift = None
 
         while offset <= n - m:
             j = m - 1
+            yield locals()
+
             while P[j] == T[offset+j] and j >= 0:
                 j -= 1
                 yield locals()
@@ -38,12 +41,12 @@ class BoyerMoore:
             if j < 0:
                 success = True
                 yield locals()
-                return
+                return offset
 
             mismatch = T[offset+j]
             shift = j - last[mismatch]
             offset = offset + max(1, shift)
             yield locals()
 
-    def step(self):
-        pass
+        success = False
+        yield locals()
